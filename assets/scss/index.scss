@@ -1,0 +1,91 @@
+//Reset Styles
+
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	height: 100%;
+}
+
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+//Base Styles
+
+body,html {
+	height: 100%;
+}
+
+
+
+//Layout Styles
+
+.addStick{
+	width: 150px;
+	height: 150px;
+	position: fixed;
+	left:10px;
+	top:50px;
+}
+
+.addStick2{
+	width: 150px;
+	height: 150px;
+	position: fixed;
+	left:10px;
+	top:200px;
+}
+
+.addStick__img{
+	width:100px;
+	height: auto;
+}
+
+.sticks{
+	text-align: center;
+	width: 70%;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sticks__container{
+	display: inline-flex;
+}
+
+.sticks__article{
+	width: 320px;
+	min-height: 320px;
+	border: 2px solid black;
+	margin: 5px 5px;
+}
+
+.sticks__img{
+	width: 80%;
+}
+

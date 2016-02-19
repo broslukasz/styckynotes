@@ -1,0 +1,102 @@
+/* line 3, ../scss/index.scss */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
+}
+
+/* HTML5 display-role reset for older browsers */
+/* line 14, ../scss/index.scss */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+/* line 17, ../scss/index.scss */
+body {
+  line-height: 1;
+  height: 100%;
+}
+
+/* line 22, ../scss/index.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 25, ../scss/index.scss */
+blockquote, q {
+  quotes: none;
+}
+
+/* line 29, ../scss/index.scss */
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+/* line 33, ../scss/index.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 40, ../scss/index.scss */
+body, html {
+  height: 100%;
+}
+
+/* line 48, ../scss/index.scss */
+.addStick {
+  width: 150px;
+  height: 150px;
+  position: fixed;
+  left: 10px;
+  top: 50px;
+}
+
+/* line 56, ../scss/index.scss */
+.addStick2 {
+  width: 150px;
+  height: 150px;
+  position: fixed;
+  left: 10px;
+  top: 200px;
+}
+
+/* line 64, ../scss/index.scss */
+.addStick__img {
+  width: 100px;
+  height: auto;
+}
+
+/* line 69, ../scss/index.scss */
+.sticks {
+  text-align: center;
+  width: 70%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* line 77, ../scss/index.scss */
+.sticks__container {
+  display: inline-flex;
+}
+
+/* line 81, ../scss/index.scss */
+.sticks__article {
+  width: 320px;
+  min-height: 320px;
+  border: 2px solid black;
+  margin: 5px 5px;
+}
+
+/* line 88, ../scss/index.scss */
+.sticks__img {
+  width: 80%;
+}
