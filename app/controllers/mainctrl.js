@@ -121,6 +121,7 @@ document.addEventListener("drop", handleDrop);
             // it checks if the img has been dragged
             if (draggedNode.id.includes('newId')) {
                 console.log('złapano obrazek');
+                var allContent = draggedNode.parentNode.innerHTML;
                 var decectElement = targetEvent.childNodes.length > 1 ? "has children" : "no children";
                 var allContent = draggedNode.parentNode.innerHTML,
                     oldId = draggedNode.parentNode.id;
@@ -149,11 +150,15 @@ document.addEventListener("drop", handleDrop);
                         var targetSelect;
                         var parentId = targetEvent.parentNode.id;
                         var parentIdLetters = parentId.match(/[a-z]+/g).join();
+                        var PrimaryStickID = draggedNode.id;
+                        var PrimaryArticleID = draggedNode.parentNode.id;
                         console.log('Zastąpiono!');
                         switch(parentIdLetters){
+                            // jeśli zostanie zaznaczona karteczka
                             case "article":
                                 var targetSelect = event.target.parentNode
                                 break;
+                            // jesli zostanie zaznaczony obszar
                             case "cont":
                                 var targetSelect = event.target
                                 break;
@@ -161,9 +166,9 @@ document.addEventListener("drop", handleDrop);
 
                         // draggedNode = document.getElementById(data),
 
-
+                        // Changin parent node id of source
                         draggedNode.parentNode.id = targetSelect.id;
-                        targetSelect.id = oldId;
+                        targetSelect.id = PrimaryArticleID;
 
                         // Copy of the second note
                         var copy = targetSelect.innerHTML;
