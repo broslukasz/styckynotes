@@ -5,7 +5,7 @@ angular.module('exampleApp')
     vm.notes = [{},{},{}];
     vm.countSticks = 0;
     vm.countArticles = 0;
-    var dragSrcEl = null;
+    var targetElementID = null;
 
 /* Events fired on the drag target */
 
@@ -36,7 +36,7 @@ document.addEventListener("drop", handleDrop);
 
     function handleDragStart(event){
         // The dataTransfer.setData() method sets the data type and the value of the dragged data
-        dragSrcEl = event.target.id;
+        targetElementID = event.target.id;
 
         if (event.target.id == "yellow || green") {
             event.dataTransfer.setData("text", event.target.id);
@@ -78,27 +78,20 @@ document.addEventListener("drop", handleDrop);
 
     function handleDrop(event){
         event.preventDefault();
+        event.target.style.border = "";
         var data = event.dataTransfer.getData("Text"),
-            draggedNode = document.getElementById(data);  
+            draggedNode = document.getElementById(data),
+            targetEvent = event.target; 
 
-        //This behaviour if a new or existing note is dropped on a ampty drop container
-        if ( event.target.className === dropClassName) {
-            event.target.style.border = "";
-            preventError = data.match(/newId/);
-            var effectType = data === "yellow" || data ==="green" ? "copy" : "move";
-            
-            // if a note is dropped on the same element
-            if (event.target.id !== "" && dragSrcEl == event.target.childNodes[1].id){
-                    // Don't do anything if the element is the same
-                    console.log('You have dragged on the same element');
-            // if a note is dropped on the other
-            } else {
-                // if a new note is to be added
-                if (effectType === "copy" && event.target.children.length === 0) {
-                    // Make a new copy if a new stick to be added
+        // It checks if a new element is being adding
+        if (data === "yellow" || data === "green") {
+            console.log("Dodano nowy element");
+
+            // it checks if target area is empty
+            if (targetEvent.id === "" && targetEvent.className !=="stickOptions" && targetEvent.className !== "sticks" && targetEvent.className !== "ng-scope") {
                     var nodeCopy = draggedNode.cloneNode(true);
                     nodeCopy.id = "newId" + vm.countSticks; /* We cannot use the same ID */
-                    event.target.appendChild(nodeCopy);
+                    targetEvent.appendChild(nodeCopy);
                     var newNoteImg = document.getElementById('newId' + vm.countSticks);
                     newNoteImg.className = "sticks__img";
                     newNoteImg.style.opacity = "1";
@@ -108,20 +101,108 @@ document.addEventListener("drop", handleDrop);
                     stickyNoteText.appendChild(nodeText);
                     stickyNoteText.className = "stickOptions";
 
-                    event.target.appendChild(stickyNoteText);
+                    targetEvent.appendChild(stickyNoteText);
 
                     newNoteImg.parentNode.id = "article" + vm.countArticles;
 
                     vm.countSticks++;
                     vm.countArticles++;
-                    console.log(newNoteImg);
+            } else {
+                // The infrmation that the target area is not empty
+                console.log("element jest pełny");
+            }
 
-                } else if(preventError === null || preventError[0] !== "newId"){
-                    console.log('This message appears whan drop area is draggd instead of photo');
+        // Here are events for existing notes manipulation
+        } else {
+            console.log("zmieniono stary element");
+            draggedNode.style.opacity = "1"
+            // This behaviour assures that only img has been dragged
+            preventError = data.match(/newId/);
+            // it checks if the img has been dragged
+            if (draggedNode.id.includes('newId')) {
+                console.log('złapano obrazek');
+                var decectElement = targetEvent.childNodes.length > 1 ? "has children" : "no children";
+                var allContent = draggedNode.parentNode.innerHTML,
+                    oldId = draggedNode.parentNode.id;
+
+                 // This behaviour to move the content
+                if (decectElement === "no children" && (targetEvent.className !== "sticks__img" && targetEvent.className !== "stickOptions") ) {
+
+                    //the old one
+                    draggedNode.parentNode.id = "";
+                    draggedNode.parentNode.innerHTML = "";
+
+                    // the new one
+                    event.target.innerHTML = allContent;
+                    event.target.id = "article" + (vm.countArticles - 1);
+
+                    // the old one
+                    console.log("Dragged to no children area");
+
+                // This behaviour to Replace the content
+                } else if (decectElement === "has children" || decectElement === "no children") {
+
+                    // Dont do anything if drop on the same element
+                    if (draggedNode.id === targetEvent.id || draggedNode.parentNode.id === targetEvent.parentNode.id){
+                        console.log("element is the same!");
+                    } else {
+                        var targetSelect;
+                        var parentId = targetEvent.parentNode.id;
+                        var parentIdLetters = parentId.match(/[a-z]+/g).join();
+                        console.log('Zastąpiono!');
+                        switch(parentIdLetters){
+                            case "article":
+                                var targetSelect = event.target.parentNode
+                                break;
+                            case "cont":
+                                var targetSelect = event.target
+                                break;
+                        }
+
+                        // draggedNode = document.getElementById(data),
+
+
+                        draggedNode.parentNode.id = targetSelect.id;
+                        targetSelect.id = oldId;
+
+                        // Copy of the second note
+                        var copy = targetSelect.innerHTML;
+
+                        draggedNode.parentNode.innerHTML = copy;
+
+                        // into new implementation
+                        targetSelect.innerHTML = allContent;
+
+                        // into old implementation
+                        console.log("Dragged to CHILDREN area and will be replaced")
+
+                                                        /*
+                                console.log('Zastąpiono: ' + event.target.innerHTML);
+
+                                draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
+                                event.target.parentNode.id = oldId;
+                                // Copy of the new
+                                var copy = event.target.parentNode.innerHTML;
+
+                                draggedNode.parentNode.innerHTML = copy;
+
+                                // into new implementation
+                                event.target.parentNode.innerHTML = allContent;
+
+                                // into old implementation */
+                    }
                 }
+            }
 
-                // the existing note is moved or replaced.
-                else {
+/*
+
+            // This prevents when dragging on the same element or unexpected drag area
+            if (targetEvent.className === draggedNode.className || (preventError[0] !== "newId")){
+                // Don't do anything if the element is the same
+                console.log('The element has been dragged on the same place');
+            } else {
+                // The behaviour if element is dropped on the drop area
+                if ( targetEvent.className === dropClassName){
                     draggedNode.style.opacity = "1";
 
                     // old content Grab
@@ -129,7 +210,7 @@ document.addEventListener("drop", handleDrop);
                     var oldId = draggedNode.parentNode.id;
 
                     // if required to switch dragged element place
-                    if (event.target.id !== "" && dragSrcEl != this) {
+                    if (event.target.id !== "" && targetElementID != this) {
                         
                         console.log('Zastąpiono: ' + event.target.innerHTML);
 
@@ -162,72 +243,74 @@ document.addEventListener("drop", handleDrop);
                     }
 
                 }
-            } 
-            console.log(event.dataTransfer.dropEffect);
+             
+            
 
-        // This is when a new note or existing is dropped on any existing note
-        } else if(event.target.className === "sticks__img"){
-            // this is the behavoiur when replacing sticks dragging on IMG
-            console.log('najechałeś na obrazek');
-            event.target.style.border = "";
-            // if the same element
-            var hasElement = event.target.id.match(/newId/);
-            if (event.target.id === dragSrcEl){
-                    // Don't do anything if the element is the same
-                    console.log('You have dragged on the same element');
+                // The behaviour if element is dropped on the IMG    
+                } if (event.target.className === "sticks__img"){
+                    console.log('najechałeś na obrazek');
+                    event.target.style.border = "";
+                    // if the same element
+                    var hasElement = event.target.id.match(/newId/);
+                    if (event.target.id === targetElementID){
+                            // Don't do anything if the element is the same
+                            console.log('You have dragged on the same element');
 
-            // If a new note is dragged on the existing element
-            } else if (hasElement = "newId" && (data === "yellow" || data ==="green")){
-                console.log('you cannot create on the same element');
-            } else {
-               
-                    event.dataTransfer.dropEffect = effectType;
-                    draggedNode.style.opacity = "1";
-
-                    // old content
-                    var allContent = draggedNode.parentNode.innerHTML;
-                    var oldId = draggedNode.parentNode.id;
-
-                    if (event.target.id !== "" && dragSrcEl != this) {
-                        // switch dragged elements places
-                        console.log('Zastąpiono: ' + event.target.innerHTML);
-
-                        draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
-                        event.target.parentNode.id = oldId;
-                        // Copy of the new
-                        var copy = event.target.parentNode.innerHTML;
-
-                        draggedNode.parentNode.innerHTML = copy;
-
-                        // into new implementation
-                        event.target.parentNode.innerHTML = allContent;
-
-                        // into old implementation
-
+                    // If a new note is dragged on the existing element
+                    } else if (hasElement = "newId" && (data === "yellow" || data ==="green")){
+                        console.log('you cannot create on the same element');
                     } else {
+                       
+                            event.dataTransfer.dropEffect = effectType;
+                            draggedNode.style.opacity = "1";
 
-                        //the old one
-                            draggedNode.parentNode.id = "";
-                            draggedNode.parentNode.innerHTML = "";
+                            // old content
+                            var allContent = draggedNode.parentNode.innerHTML;
+                            var oldId = draggedNode.parentNode.id;
 
-                            // the new one
-                            event.target.innerHTML = allContent;
-                            event.target.id = "article" + (vm.countArticles - 1);
+                            if (event.target.id !== "" && targetElementID != this) {
+                                // switch dragged elements places
+                                console.log('Zastąpiono: ' + event.target.innerHTML);
 
-                            // the old one
-                            console.log("tekst: " + document.getElementById(data).parentNode.innerHTML);
+                                draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
+                                event.target.parentNode.id = oldId;
+                                // Copy of the new
+                                var copy = event.target.parentNode.innerHTML;
+
+                                draggedNode.parentNode.innerHTML = copy;
+
+                                // into new implementation
+                                event.target.parentNode.innerHTML = allContent;
+
+                                // into old implementation
+
+                            } else {
+
+                                //the old one
+                                    draggedNode.parentNode.id = "";
+                                    draggedNode.parentNode.innerHTML = "";
+
+                                    // the new one
+                                    event.target.innerHTML = allContent;
+                                    event.target.id = "article" + (vm.countArticles - 1);
+
+                                    // the old one
+                                    console.log("tekst: " + document.getElementById(data).parentNode.innerHTML);
+                            }
+
+                        
                     }
-
+                        }
+                    }
                 
-            } 
-            console.log(event.dataTransfer.dropEffect);
-        } else {
+     */       
+         /*else {
             var data = event.dataTransfer.getData("Text");
             var draggedNode = document.getElementById(data); 
             draggedNode.parentNode.id = "";            
             draggedNode.parentNode.innerHTML = "";
-        }
-    }
+        } */
+}}
 
 
 });
