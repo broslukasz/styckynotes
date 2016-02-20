@@ -21,16 +21,16 @@
 <section class="sticks">
 
 <div class="addStick" id="yellowStickField">
-    <img id="yellow" class="addStick__img" src="assets/img/stick.png">   
+    <img id="yellow" class="addStick__img" src="assets/img/stick.png" draggable="true">   
 </div>
 <div class="addStick2" id="yellowStickField2">
-    <img id="green" class="addStick__img" src="assets/img/stickgreen.png">   
+    <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true">   
 </div>
 
-    <div class="sticks__container" draggable="true">
-        <article class="sticks__article droptarget" ng-repeat="note in mainCtrl.notes">
+    <div class="sticks__container" draggable="true" id="cont">
+        <div class="sticks__article droptarget" ng-repeat="note in mainCtrl.notes">
 
-        </article> 
+        </div> 
     </div>
 
     <div class="sticks__container">
