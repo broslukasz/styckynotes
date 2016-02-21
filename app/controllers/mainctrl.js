@@ -44,9 +44,20 @@ whereToDelete.addEventListener("drop", handleDeleteDrop);
         event.preventDefault();
         var data = event.dataTransfer.getData("Text"),
             draggedNode = document.getElementById(data),
-            targetEvent = event.target;
-        draggedNode.parentNode.id = "";
+            draggedNodeParent = draggedNode.parentNode;
         draggedNode.parentNode.innerHTML = "";
+
+        // adding remove field img
+        var newRemoveImg = document.createElement('img');
+        newRemoveImg.setAttribute('src', 'assets/img/trashbin.png');
+        newRemoveImg.className = "sticks__removeField";
+        draggedNodeParent.appendChild(newRemoveImg);
+        removeBin = document.querySelectorAll('.sticks__removeField');
+        [].forEach.call(removeBin, function(bin) {
+            bin.addEventListener('click', removeThis);
+         });
+
+        draggedNodeParent.id = "";
     }
 
 
@@ -171,6 +182,15 @@ whereToDelete.addEventListener("drop", handleDeleteDrop);
 
                 //Check if has space to add then add new stick/stick on a new space
                 addNewStick(getArticle);
+
+                var newRemoveImg = document.createElement('img');
+                newRemoveImg.setAttribute('src', 'assets/img/trashbin.png');
+                newRemoveImg.className = "sticks__removeField";
+                getArticle.appendChild(newRemoveImg);
+                removeBin = document.querySelectorAll('.sticks__removeField');
+                [].forEach.call(removeBin, function(bin) {
+                    bin.addEventListener('click', removeThis);
+                 });
             }
 
         // Here are events for existing notes manipulation
@@ -192,9 +212,19 @@ whereToDelete.addEventListener("drop", handleDeleteDrop);
                  // This behaviour to move the content
                 if (decectElement === "no children" && (targetEvent.className !== "sticks__img" && targetEvent.className !== "stickOptions") ) {
 
+                    var draggedNodeParent = draggedNode.parentNode;
                     //the old one
                     draggedNode.parentNode.id = "";
                     draggedNode.parentNode.innerHTML = "";
+                    // adding bin to the old one
+                    var newRemoveImg = document.createElement('img');
+                    newRemoveImg.setAttribute('src', 'assets/img/trashbin.png');
+                    newRemoveImg.className = "sticks__removeField";
+                    draggedNodeParent.appendChild(newRemoveImg);
+                    removeBin = document.querySelectorAll('.sticks__removeField');
+                    [].forEach.call(removeBin, function(bin) {
+                        bin.addEventListener('click', removeThis);
+                     });
 
                     // the new one
                     event.target.innerHTML = allContent;
@@ -230,22 +260,12 @@ whereToDelete.addEventListener("drop", handleDeleteDrop);
                         targetSelect.innerHTML = allContent;
 
                         // into old implementation
-                        console.log("Dragged to CHILDREN area and will be replaced")
+                        console.log("Dragged to CHILDREN area and will be replaced");
 
-                                                        /*
-                                console.log('Zastąpiono: ' + event.target.innerHTML);
-
-                                draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
-                                event.target.parentNode.id = oldId;
-                                // Copy of the new
-                                var copy = event.target.parentNode.innerHTML;
-
-                                draggedNode.parentNode.innerHTML = copy;
-
-                                // into new implementation
-                                event.target.parentNode.innerHTML = allContent;
-
-                                // into old implementation */
+                        var removeBin = document.querySelectorAll('.sticks__removeField');
+                        [].forEach.call(removeBin, function(bin) {
+                          bin.addEventListener('click', removeThis);
+                        });
                     }
                 }
             }
@@ -261,7 +281,6 @@ plusButton.addEventListener('click', function(){
     var newRemoveImg = document.createElement('img');
     newRemoveImg.setAttribute('src', 'assets/img/trashbin.png');
     newRemoveImg.className = "sticks__removeField";
-    newRemoveImg.id = ""
     newArticle.appendChild(newRemoveImg);
     containerNode.appendChild(newArticle);
     removeBin = document.querySelectorAll('.sticks__removeField');
@@ -281,12 +300,6 @@ function removeThis(event){
     var thisArticle = document.getElementById('nodeToRemove');
     containerNode.removeChild(nodeToRemove);   
 }
-
-var removeField = document.getElementById('removeField');
-removeField.addEventListener('click', function(){
-    
-
-})
 
 });
 
