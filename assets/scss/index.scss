@@ -69,6 +69,22 @@ $stickImgSize: 80%;
 	height: auto;
 }
 
+$binSize: 13%;
+$binImgSize: 60%;
+
+.trashBin{
+	width: $binSize;
+	height: $binImgSize;
+	position: fixed;
+	right:1%;
+	top:2vw;
+}
+
+.trashBin__img{
+	width: $binImgSize;
+	height: auto;
+}
+
 .sticks{
 	text-align: center;
 	width: 67%;
@@ -81,7 +97,7 @@ $stickImgSize: 80%;
 	height: 100%;
 }
 
-$imgWidth: 30%;
+$imgWidth: 31%;
 $border: $imgWidth * 0.1;
 
 .sticks__article{
@@ -93,9 +109,30 @@ $border: $imgWidth * 0.1;
 	padding-bottom: 30%;
 	border: 0.5vw solid black;
 	margin: 1% 1%;
+	position: relative
 }
 
 .sticks__img{
 	width: 80%;
+}
+
+.sticks__newField{
+	position: fixed;
+    right: 4.5vw;
+    top: 12vw;
+    font-weight: 900;
+    line-height: 1;
+    font-size: 10vw;
+    cursor: pointer;
+}
+
+.sticks__removeField{
+	position: absolute;
+    right: 4.5vw;
+    top: 12vw;
+    font-weight: 900;
+    line-height: 1;
+    font-size: 10vw;
+    cursor: pointer;
 }
 

@@ -6,6 +6,8 @@ angular.module('exampleApp')
     vm.countSticks = 0;
     vm.countArticles = 0;
     var targetElementID = null;
+    var whereToEnter = document.getElementById("cont");
+    var whereToDelete = document.getElementById("trashBin");
 
 /* Events fired on the drag target */
 
@@ -18,8 +20,9 @@ document.addEventListener("dragend", handleDragEnd);
 
 /* Events fired on the drop target */
 
+var whereToDrop = document.getElementById("cont");
 // When the draggable element enters the droptarget, change the DIVS's border style
-document.addEventListener("dragenter", handleDragEnter);
+whereToDrop.addEventListener("dragenter", handleDragEnter);
 
 // By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
 document.addEventListener("dragover", handleDragOver);
@@ -28,10 +31,23 @@ document.addEventListener("dragover", handleDragOver);
 document.addEventListener("dragleave", handleDragLeave);
 
 // On drop handler
-document.addEventListener("drop", handleDrop);
+whereToEnter.addEventListener("drop", handleDrop);
+
+// On delete handler
+
+whereToDelete.addEventListener("drop", handleDeleteDrop);
 
 
 // Functions
+
+    function handleDeleteDrop(event){
+        event.preventDefault();
+        var data = event.dataTransfer.getData("Text"),
+            draggedNode = document.getElementById(data),
+            targetEvent = event.target;
+        draggedNode.parentNode.id = "";
+        draggedNode.parentNode.innerHTML = "";
+    }
 
 
     function handleDragStart(event){
@@ -59,7 +75,7 @@ document.addEventListener("drop", handleDrop);
     }
 
     function handleDragEnter(event){
-        if ( event.target.className == dropClassName) {
+        if ( event.target.className === dropClassName) {
             event.target.style.border = "0.5vw dotted red";
         }
     }
@@ -69,12 +85,16 @@ document.addEventListener("drop", handleDrop);
     }
 
     function handleDragLeave(event){
-        if ( event.target.className == "sticks__article droptarget ng-scope") {
+        if ( event.target.className === dropClassName && event.target.id !== "0") {
             event.target.style.border = "";
-        }
+        };
     }
 
-    var dropClassName = "sticks__article droptarget ng-scope";
+    function handleDelete(){
+
+    }
+
+    var dropClassName = "sticks__article droptarget";
 
     function handleDrop(event){
         event.preventDefault();
@@ -86,19 +106,18 @@ document.addEventListener("drop", handleDrop);
         var targetSelect,
             parentId = targetEvent.parentNode.id,
             parentIdLetters = parentId.match(/[a-z]+/g).join();
-        console.log('Szukam pustego!');
         switch(parentIdLetters){
-            // jeśli zostanie zaznaczona karteczka
+            // if a stick has been selected
             case "article":
                 var targetSelect = event.target.parentNode
                 break;
-            // jesli zostanie zaznaczony obszar
+            // if stick area has been selected
             case "cont":
                 var targetSelect = event.target
                 break;
         }
 
-        event.target.style.border = "";
+        targetSelect.style.border = "";
         targetSelect.style.paddingBottom = "30%";
 
         // It checks if a new element is being adding
@@ -127,7 +146,7 @@ document.addEventListener("drop", handleDrop);
                 vm.countArticles++;
             }
 
-            // it checks if target area is empty and adds a new stick
+            // if target area is empty it adds a new stick if not adds to the empty field
             if (targetEvent.id === "" && targetEvent.className !=="stickOptions" && targetEvent.className !== "sticks" && targetEvent.className !== "ng-scope") {
                 addNewStick(targetEvent);
             } else {
@@ -231,124 +250,43 @@ document.addEventListener("drop", handleDrop);
                 }
             }
 
-/*
-
-            // This prevents when dragging on the same element or unexpected drag area
-            if (targetEvent.className === draggedNode.className || (preventError[0] !== "newId")){
-                // Don't do anything if the element is the same
-                console.log('The element has been dragged on the same place');
-            } else {
-                // The behaviour if element is dropped on the drop area
-                if ( targetEvent.className === dropClassName){
-                    draggedNode.style.opacity = "1";
-
-                    // old content Grab
-                    var allContent = draggedNode.parentNode.innerHTML;
-                    var oldId = draggedNode.parentNode.id;
-
-                    // if required to switch dragged element place
-                    if (event.target.id !== "" && targetElementID != this) {
-                        
-                        console.log('Zastąpiono: ' + event.target.innerHTML);
-
-                        draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
-                        event.target.id = oldId;
-
-                        // Copy of the second note
-                        var copy = event.target.innerHTML;
-
-                        draggedNode.parentNode.innerHTML = copy;
-
-                        // into new implementation
-                        event.target.innerHTML = allContent;
-
-                        // into old implementation
-
-                    // if ht 
-                    } else {
-
-                        //the old one
-                            draggedNode.parentNode.id = "";
-                            draggedNode.parentNode.innerHTML = "";
-
-                            // the new one
-                            event.target.innerHTML = allContent;
-                            event.target.id = "article" + (vm.countArticles - 1);
-
-                            // the old one
-                            console.log("tekst: " + document.getElementById(data).parentNode.innerHTML);
-                    }
-
-                }
-             
-            
-
-                // The behaviour if element is dropped on the IMG    
-                } if (event.target.className === "sticks__img"){
-                    console.log('najechałeś na obrazek');
-                    event.target.style.border = "";
-                    // if the same element
-                    var hasElement = event.target.id.match(/newId/);
-                    if (event.target.id === targetElementID){
-                            // Don't do anything if the element is the same
-                            console.log('You have dragged on the same element');
-
-                    // If a new note is dragged on the existing element
-                    } else if (hasElement = "newId" && (data === "yellow" || data ==="green")){
-                        console.log('you cannot create on the same element');
-                    } else {
-                       
-                            event.dataTransfer.dropEffect = effectType;
-                            draggedNode.style.opacity = "1";
-
-                            // old content
-                            var allContent = draggedNode.parentNode.innerHTML;
-                            var oldId = draggedNode.parentNode.id;
-
-                            if (event.target.id !== "" && targetElementID != this) {
-                                // switch dragged elements places
-                                console.log('Zastąpiono: ' + event.target.innerHTML);
-
-                                draggedNode.parentNode.id = "article" + (vm.countArticles - 1);
-                                event.target.parentNode.id = oldId;
-                                // Copy of the new
-                                var copy = event.target.parentNode.innerHTML;
-
-                                draggedNode.parentNode.innerHTML = copy;
-
-                                // into new implementation
-                                event.target.parentNode.innerHTML = allContent;
-
-                                // into old implementation
-
-                            } else {
-
-                                //the old one
-                                    draggedNode.parentNode.id = "";
-                                    draggedNode.parentNode.innerHTML = "";
-
-                                    // the new one
-                                    event.target.innerHTML = allContent;
-                                    event.target.id = "article" + (vm.countArticles - 1);
-
-                                    // the old one
-                                    console.log("tekst: " + document.getElementById(data).parentNode.innerHTML);
-                            }
-
-                        
-                    }
-                        }
-                    }
-                
-     */       
-         /*else {
-            var data = event.dataTransfer.getData("Text");
-            var draggedNode = document.getElementById(data); 
-            draggedNode.parentNode.id = "";            
-            draggedNode.parentNode.innerHTML = "";
-        } */
 }}
 
+var plusButton = document.getElementById('addNewField');
+plusButton.addEventListener('click', function(){
+    var thisButton = plusButton;
+    var containerNode = document.getElementById('cont');
+    var newArticle = document.createElement('article');
+    newArticle.className = "sticks__article droptarget";
+    var newRemoveImg = document.createElement('img');
+    newRemoveImg.setAttribute('src', 'assets/img/trashbin.png');
+    newRemoveImg.className = "sticks__removeField";
+    newRemoveImg.id = ""
+    newArticle.appendChild(newRemoveImg);
+    containerNode.appendChild(newArticle);
+    removeBin = document.querySelectorAll('.sticks__removeField');
+    [].forEach.call(removeBin, function(bin) {
+      bin.addEventListener('click', removeThis);
+    });
+})
+
+var removeBin = document.querySelectorAll('.sticks__removeField');
+[].forEach.call(removeBin, function(bin) {
+  bin.addEventListener('click', removeThis);
+});
+
+function removeThis(event){
+    var containerNode = document.getElementById('cont');
+    this.parentNode.id = "nodeToRemove";
+    var thisArticle = document.getElementById('nodeToRemove');
+    containerNode.removeChild(nodeToRemove);   
+}
+
+var removeField = document.getElementById('removeField');
+removeField.addEventListener('click', function(){
+    
+
+})
 
 });
 

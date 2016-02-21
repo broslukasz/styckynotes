@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge,chrome=1"/>
     <title>Contour</title>
     <link href="assets/stylesheets/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- The core AngularJS library -->
     <script src="bower_components/angular/angular.min.js"></script>
@@ -20,17 +21,21 @@
 
 <section class="sticks">
 
-<div class="addStick" id="yellowStickField">
+<div class="addStick test" id="yellowStickField">
     <img id="yellow" class="addStick__img" src="assets/img/stick.png" draggable="true">   
 </div>
 <div class="addStick2" id="yellowStickField2">
     <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true">   
 </div>
+<div class="trashBin" id="trashBin">
+    <img id="trashBin" class="trashBin__img" src="assets/img/trashbin.png" draggable="true">   
+</div>
+<div id="addNewField" class="sticks__newField">&#43</div>
 
     <div class="sticks__container" draggable="true" id="cont">
-        <article class="sticks__article droptarget" ng-repeat="note in mainCtrl.notes">
-
-        </article> 
+        <article class="sticks__article droptarget">
+        <img src="assets/img/trashbin.png" id="removeField" class="sticks__removeField"></img>
+        </article>
     </div>
 
 </section>

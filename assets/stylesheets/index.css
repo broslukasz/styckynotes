@@ -74,7 +74,22 @@ body, html {
   height: auto;
 }
 
-/* line 72, ../scss/index.scss */
+/* line 75, ../scss/index.scss */
+.trashBin {
+  width: 13%;
+  height: 60%;
+  position: fixed;
+  right: 1%;
+  top: 2vw;
+}
+
+/* line 83, ../scss/index.scss */
+.trashBin__img {
+  width: 60%;
+  height: auto;
+}
+
+/* line 88, ../scss/index.scss */
 .sticks {
   text-align: center;
   width: 67%;
@@ -83,24 +98,47 @@ body, html {
   margin-right: auto;
 }
 
-/* line 80, ../scss/index.scss */
+/* line 96, ../scss/index.scss */
 .sticks__container {
   height: 100%;
 }
 
-/* line 87, ../scss/index.scss */
+/* line 103, ../scss/index.scss */
 .sticks__article {
   float: left;
-  width: 30%;
-  height: 22.5%;
-  min-width: 3.9%;
-  min-height: 3.9%;
+  width: 31%;
+  height: 23.25%;
+  min-width: 4.03%;
+  min-height: 4.03%;
   padding-bottom: 30%;
   border: 0.5vw solid black;
   margin: 1% 1%;
+  position: relative;
 }
 
-/* line 98, ../scss/index.scss */
+/* line 115, ../scss/index.scss */
 .sticks__img {
   width: 80%;
+}
+
+/* line 119, ../scss/index.scss */
+.sticks__newField {
+  position: fixed;
+  right: 4.5vw;
+  top: 12vw;
+  font-weight: 900;
+  line-height: 1;
+  font-size: 10vw;
+  cursor: pointer;
+}
+
+/* line 129, ../scss/index.scss */
+.sticks__removeField {
+  position: absolute;
+  right: 4.5vw;
+  top: 12vw;
+  font-weight: 900;
+  line-height: 1;
+  font-size: 10vw;
+  cursor: pointer;
 }
