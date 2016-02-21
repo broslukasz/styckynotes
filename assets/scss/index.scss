@@ -45,44 +45,54 @@ body,html {
 
 //Layout Styles
 
+$sticksSize: 10%;
+$stickImgSize: 80%;
+
 .addStick{
-	width: 150px;
-	height: 150px;
+	width: $sticksSize;
+	height: $sticksSize;
 	position: fixed;
-	left:10px;
-	top:50px;
+	left:1%;
+	top:2vw;
 }
 
 .addStick2{
-	width: 150px;
-	height: 150px;
+	width: $sticksSize;
+	height: $sticksSize;
 	position: fixed;
-	left:10px;
-	top:200px;
+	left:1%;
+	top:12vw;
 }
 
 .addStick__img{
-	width:100px;
+	width: $stickImgSize;
 	height: auto;
 }
 
 .sticks{
 	text-align: center;
-	width: 70%;
+	width: 67%;
 	height: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 .sticks__container{
-	display: inline-flex;
+	height: 100%;
 }
 
+$imgWidth: 30%;
+$border: $imgWidth * 0.1;
+
 .sticks__article{
-	width: 320px;
-	min-height: 320px;
-	border: 2px solid black;
-	margin: 5px 5px;
+	float: left;
+	width: $imgWidth;
+	height: $imgWidth * 0.75;
+	min-width: $imgWidth * 0.13;
+	min-height: $imgWidth * 0.13;
+	padding-bottom: 30%;
+	border: 0.5vw solid black;
+	margin: 1% 1%;
 }
 
 .sticks__img{

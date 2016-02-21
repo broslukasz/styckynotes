@@ -50,53 +50,57 @@ body, html {
   height: 100%;
 }
 
-/* line 48, ../scss/index.scss */
+/* line 51, ../scss/index.scss */
 .addStick {
-  width: 150px;
-  height: 150px;
+  width: 10%;
+  height: 10%;
   position: fixed;
-  left: 10px;
-  top: 50px;
+  left: 1%;
+  top: 2vw;
 }
 
-/* line 56, ../scss/index.scss */
+/* line 59, ../scss/index.scss */
 .addStick2 {
-  width: 150px;
-  height: 150px;
+  width: 10%;
+  height: 10%;
   position: fixed;
-  left: 10px;
-  top: 200px;
+  left: 1%;
+  top: 12vw;
 }
 
-/* line 64, ../scss/index.scss */
+/* line 67, ../scss/index.scss */
 .addStick__img {
-  width: 100px;
+  width: 80%;
   height: auto;
 }
 
-/* line 69, ../scss/index.scss */
+/* line 72, ../scss/index.scss */
 .sticks {
   text-align: center;
-  width: 70%;
+  width: 67%;
   height: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* line 77, ../scss/index.scss */
+/* line 80, ../scss/index.scss */
 .sticks__container {
-  display: inline-flex;
+  height: 100%;
 }
 
-/* line 81, ../scss/index.scss */
+/* line 87, ../scss/index.scss */
 .sticks__article {
-  width: 320px;
-  min-height: 320px;
-  border: 2px solid black;
-  margin: 5px 5px;
+  float: left;
+  width: 30%;
+  height: 22.5%;
+  min-width: 3.9%;
+  min-height: 3.9%;
+  padding-bottom: 30%;
+  border: 0.5vw solid black;
+  margin: 1% 1%;
 }
 
-/* line 88, ../scss/index.scss */
+/* line 98, ../scss/index.scss */
 .sticks__img {
   width: 80%;
 }
