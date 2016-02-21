@@ -103,7 +103,7 @@ document.addEventListener("drop", handleDrop);
 
         // It checks if a new element is being adding
         if (data === "yellow" || data === "green") {
-            console.log("Dodano nowy element");
+            console.log("Dodano nowyy element");
 
             //element to add a new content
             function addNewStick(articleItem){
