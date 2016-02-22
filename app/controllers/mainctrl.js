@@ -1,10 +1,10 @@
 angular.module('exampleApp')
 	.controller('mainCtrl', function() {
 
-    var vm = this,
-        countSticks = 0,
-        countArticles = 0,
-        targetElementId = null,
+    var vm = this;
+    vm.countSticks = 0;
+    vm.countArticles = 0;
+    var targetElementId = null,
         sticksArea = document.getElementById("cont"),
         whereToDrop = sticksArea,
         whereToDelete = document.getElementById("trashBin"),
@@ -49,38 +49,38 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 
     // get the node of a dragged element
     function getData(event){return event.dataTransfer.getData("Text");}
-    // get the details of target element
-    function targetElement(event){return this.event.target};
 
 // Functions for specific features
 
     //New stick to add
     function addNewStick(event, articleItem){
         var nodeCopy = document.getElementById(getData(event)).cloneNode(true);
-        nodeCopy.id = "newId" + countSticks;
+        nodeCopy.id = "newId" + vm.countSticks;
         articleItem.appendChild(nodeCopy);
-        var newNoteImg = document.getElementById('newId' + countSticks);
+        var newNoteImg = document.getElementById('newId' + vm.countSticks);
         newNoteImg.className = "sticks__img";
         newNoteImg.style.opacity = "1";
 
-        var stickyNoteText = document.createElement("textarea");
-        stickyNoteText.setAttribute('disabled', 'disabled');
+        var stickyNoteText = document.createElement("textArea");
+        stickyNoteText.setAttribute('readonly', '');
         stickyNoteText.setAttribute('draggable', 'true');
-        stickyNoteText.id = "textArea" + countArticles;
-        stickyNoteText.innerHTML = "To jest notatka nr: "+countArticles+"";
+        stickyNoteText.setAttribute('ng-model', 'mainCtrl.textArea');
+        stickyNoteText.setAttribute('placeholder', 'Write a note!');
+        stickyNoteText.setAttribute('value', 'Text to write');
+        stickyNoteText.id = "textArea" + vm.countArticles;
         stickyNoteText.className = "stickText";
 
         articleItem.appendChild(stickyNoteText);
 
-        articleItem.addEventListener('dbclick', textAreaFn);
+        newNoteImg.parentNode.id = "article" + vm.countArticles;
 
-        countSticks++;
-        countArticles++;
+        vm.countSticks++;
+        vm.countArticles++;
     }
 
     // Select the article regardless if article or its child has been targeted
     function articleSelectFn(event){
-        var parentId = targetElement(event).parentNode.id,
+        var parentId = event.target.parentNode.id,
             parentIdLetters = parentId.match(/[a-z]+/g).join();
         switch(parentIdLetters){
             // if a stick has been selected
@@ -120,8 +120,15 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
             var newRemoveImg = document.createElement('img');
             newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
             newRemoveImg.className = "sticks__removeField";
+            var pencilToEdit = document.createElement('img');
+            pencilToEdit.setAttribute('src', 'assets/img/pen.png');
+            pencilToEdit.className = "sticks__pen";
+
             getArticle.appendChild(newRemoveImg);
+            getArticle.appendChild(pencilToEdit);
+
             containerNode.lastChild.children[0].addEventListener('click', removeThis);
+            containerNode.lastChild.children[1].addEventListener('click', textEdition);
         };
     };
 
@@ -139,8 +146,8 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
     function handleDeleteDrop(event){
         event.preventDefault();
         var draggedNodeParent = document.getElementById(getData(event)).parentNode,
-            imgToRemove = draggedNodeParent.children[1],
-            textToRemove = draggedNodeParent.children[2];
+            imgToRemove = draggedNodeParent.children[2],
+            textToRemove = draggedNodeParent.children[3];
         if (draggedNodeParent.id.includes('article')) {
             draggedNodeParent.removeChild(imgToRemove);
             draggedNodeParent.removeChild(textToRemove);
@@ -150,7 +157,13 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 
     function handleDragStart(event){
         // The dataTransfer.setData() method sets the data type and the value of the dragged data
-        targetElementId = targetElement(event).id;
+        var resetEdit = document.querySelectorAll('.stickText');
+        [].forEach.call(resetEdit, function(reset) {
+          reset.setAttribute('disabled', 'true');
+        });
+
+
+        targetElementId = event.target.id;
 
         if (targetElementId == "yellow || green") {
             event.dataTransfer.setData("text", targetElementId);
@@ -221,7 +234,7 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                 and creats a new article*/
                 getArticle = articleNotEmpty();
 
-                //it appends a exitcross if it is required
+                //it appends a exitcross and editPencil if it is required
                 exitCrossAppend();
 
                 //Check if has space to add then add new stick/stick on a new space
@@ -240,6 +253,7 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                 var detectElement = targetElement.childNodes.length > 1 ? "has children" : "no children";
                 var allContent = draggedNodeParent.innerHTML,
                     oldId = draggedNodeParent.id;
+                    valueText = draggedNode.textContent;
 
                  // This behaviour to move the content
                 if (detectElement === "no children" && (targetElement.className !== "sticks__img" && targetElement.className !== "stickText") ) {
@@ -257,6 +271,7 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                     targetElement.id = oldId;
 
                     targetElement.children[0].addEventListener('click', removeThis);
+                    targetElement.children[1].addEventListener('click', textEdition);
 
                 // This behaviour to Replace the content
                 } else if (detectElement === "has children" || detectElement === "no children") {
@@ -283,6 +298,12 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                         // into old implementation
                         console.log("Dragged to CHILDREN area and will be replaced");
 
+                        var editText = document.querySelectorAll('.sticks__pen');
+                        [].forEach.call(editText, function(text) {
+                          text.addEventListener('click', textEdition);
+                        });
+
+
                         var removeBin = document.querySelectorAll('.sticks__removeField');
                         [].forEach.call(removeBin, function(bin) {
                           bin.addEventListener('click', removeThis);
@@ -294,10 +315,8 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 }}
 
     function textAreaFn(){
-        console.log('doubleclicked!: ' + event.target.id);
-        if (event.target.id.includes('textArea')) {
-            event.target.removeAttribute('disabled');;
-        };
+        console.log('doubleclicked!');
+        event.target.removeAttribute("disabled");
     }
 
     function handleFieldAdd(){
@@ -307,12 +326,16 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
         var newRemoveImg = document.createElement('img');
         newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
         newRemoveImg.className = "sticks__removeField";
+        var pencilToEdit = document.createElement('img');
+        pencilToEdit.setAttribute('src', 'assets/img/pen.png');
+        pencilToEdit.className = "sticks__pen";
+
         newArticle.appendChild(newRemoveImg);
+        newArticle.appendChild(pencilToEdit);
         containerNode.appendChild(newArticle);
-        removeBin = document.querySelectorAll('.sticks__removeField');
-        [].forEach.call(removeBin, function(bin) {
-          bin.addEventListener('click', removeThis);
-        });
+
+        containerNode.lastChild.children[1].addEventListener('click', textEdition);
+        containerNode.lastChild.children[0].addEventListener('click', removeThis);
     };
 
 var removeBin = document.querySelectorAll('.sticks__removeField');
@@ -326,5 +349,18 @@ function removeThis(event){
     containerNode.removeChild(nodeToRemove);   
 }
 
+    vm.textArea = "To jest notatka numer: " + vm.countArticles;
+
+var editText = document.querySelectorAll('.sticks__pen');
+[].forEach.call(editText, function(text) {
+  text.addEventListener('click', textEdition);
 });
 
+function textEdition(event){
+    var getTextArea = this.parentNode.children[3].readOnly;
+    this.parentNode.children[3].readOnly = (getTextArea === true ? '' : true ); 
+}
+
+
+// Do not do anything bellow this line!
+});

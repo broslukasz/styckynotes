@@ -44,10 +44,6 @@ body,html {
 	height: 100%;
 }
 
-textarea {
-}
-
-
 //Layout Styles
 
 $sticksSize: 10%;
@@ -124,6 +120,17 @@ $border: $imgWidth * 0.1;
 .sticks__removeField{
 	position: absolute;
     right: 1vw;
+    bottom: 1vw;
+    font-weight: 900;
+    line-height: 1;
+    font-size: 10vw;
+    cursor: pointer;
+    width: 2vw;
+}
+
+.sticks__pen{
+	position: absolute;
+    left: 1vw;
     bottom: 1vw;
     font-weight: 900;
     line-height: 1;
