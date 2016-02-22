@@ -1,6 +1,6 @@
 //Reset Styles
 
-* {
+*{
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -17,6 +17,9 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	height: 100%;
+	font-size: 1.5vw;
+	font-weight: 900;
+	font-family: 'Alex Brush', cursive;
 }
 
 ol, ul {
@@ -41,6 +44,8 @@ body,html {
 	height: 100%;
 }
 
+textarea {
+}
 
 
 //Layout Styles
@@ -116,16 +121,6 @@ $border: $imgWidth * 0.1;
 	width: 80%;
 }
 
-.sticks__newField{
-	position: fixed;
-    right: 4.5vw;
-    top: 12vw;
-    font-weight: 900;
-    line-height: 1;
-    font-size: 10vw;
-    cursor: pointer;
-}
-
 .sticks__removeField{
 	position: absolute;
     right: 1vw;
@@ -134,5 +129,29 @@ $border: $imgWidth * 0.1;
     line-height: 1;
     font-size: 10vw;
     cursor: pointer;
+    width: 2vw;
 }
 
+.newField{
+
+}
+
+.newField__plusSign{
+	position: fixed;
+    right: 4.8vw;
+    top: 12vw;
+    font-weight: 900;
+    line-height: 1;
+    font-size: 10vw;
+    cursor: pointer;
+    width: 10vw;
+}
+
+.stickText{
+	background: none;
+	position: absolute;
+    top: 3vw;
+    left: 5vw;
+    height: 10vw;
+    width: 11vw;
+}
