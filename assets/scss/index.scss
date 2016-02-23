@@ -49,7 +49,6 @@ textarea {
 	overflow: hidden;
 }
 
-/* all */
 ::-webkit-input-placeholder { color:rgba(0,0,0,0.2); }
 ::-moz-placeholder { color:rgba(0,0,0,0.2); } /* firefox 19+ */
 :-ms-input-placeholder { color:rgba(0,0,0,0.2); } /* ie */
@@ -82,6 +81,8 @@ $stickImgSize: 80%;
 	cursor: -webkit-grab;
 	cursor: grab;
 }
+
+// Modules Styles
 
 $binSize: 13%;
 $binImgSize: 60%;
@@ -193,7 +194,7 @@ $border: $imgWidth * 0.1;
 
 .stickText--outline{
 	&:focus{
-		border: 1px solid #5ba698;
+		border: 0.1vw solid #5ba698;
 	}
 }
 

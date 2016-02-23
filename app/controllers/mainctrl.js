@@ -35,16 +35,15 @@ angular.module('exampleApp')
         containerNode = document.getElementById('cont'),
         confirmButton = document.getElementById('confirmButton'),
         dropClassName = "sticks__article droptarget",
-        getArticle;
-    var editText;
+        getArticle,
+        editText;
 
     containerNode.innerHTML = localStorage.sticksContainer;
 
 /* Events fired on the drag target */
 
     document.addEventListener("dragstart", handleDragStart);
-    // Behavoiur during the drag event
-    document.addEventListener("drag", handleDrag);
+    
     // When finished dragging reset e.g. the opacity
     document.addEventListener("dragend", handleDragEnd);
 
@@ -68,13 +67,12 @@ angular.module('exampleApp')
     // On add handler
     wherefieldAdd.addEventListener('click', handleFieldAdd);
 
-
 // Functions for all event handlers
 
     // get the node of a dragged element
     function getData(event){return event.dataTransfer.getData("Text");}
 
-// Functions for of event handlers
+// Functions for event handlers
 
     function handleDeleteDrop(event){
         event.preventDefault();
@@ -96,7 +94,6 @@ angular.module('exampleApp')
             event.dataTransfer.setData("text", targetElementId);
         } else {
             event.dataTransfer.setData("text/plain", targetElementId);
-            console.log("To jest: " + event.target.innerHTML)
         }
 
         var readOnlyApply = document.querySelectorAll('.stickText');
@@ -108,10 +105,6 @@ angular.module('exampleApp')
         
         // Change the opacity of the draggable element
         event.target.style.opacity = "0.4";        
-    }
-
-    function handleDrag(event){
-
     }
 
     function handleDragEnd(event){
@@ -134,13 +127,10 @@ angular.module('exampleApp')
         };
     }
 
-    function handleDelete(){
-
-    }
-
     function handleDrop(event){
         event.preventDefault();
         var data = getData(event);
+        if (data === "") {return ""};
         var draggedNode = document.getElementById(data),
             draggedNodeParent = draggedNode.parentNode,
             targetElement = event.target;
@@ -148,21 +138,20 @@ angular.module('exampleApp')
         //it selects the article of a target regardless article or its child's been targeted.
         var articleSelect = articleSelectFn(event);
 
+        if (articleSelect === undefined) {return ""};
+
         articleSelect.style.border = "";
         articleSelect.style.paddingBottom = "30%";
 
         // It checks if a new element is being adding
         if (data === "yellow" || data === "green") {
-            console.log("Dodano nowyy element");
 
             // if target area is empty it adds a new stick if not adds to the empty field
             if (targetElement.id === "" && targetElement.className !=="stickText" && targetElement.className !== "sticks" && targetElement.className !== "ng-scope") {
                 addNewStick(event, targetElement);
             } else {
-                // The infrmation that the target area is not empty
-                console.log("element jest pełny");
                 /* this function triggers when target area for a new stick is not empty 
-                and creats a new article*/
+                and a new article will be created*/
                 getArticle = articleNotEmpty();
 
                 //it appends a exitcross and editPencil if it is required
@@ -171,16 +160,13 @@ angular.module('exampleApp')
                 //Check if has space to add then add new stick/stick on a new space
                 addNewStick(event, getArticle);
                 }
-
         // Here are events for existing notes manipulation
         } else {
-            console.log("existing element has been changed");
             draggedNode.style.opacity = "1"
             // This behaviour assures that only img has been dragged
             preventError = data.match(/newId/);
             // it checks if the img has been droped to the node functional elements
             if (draggedNode.parentNode.id.includes('article') && targetElement.className !== "sticks__removeField" && targetElement.className !== "sticks__pen") {
-                console.log('img grabbed!');
                 var detectElement = targetElement.childNodes.length > 1 ? "has children" : "no children";
                 var allContent = draggedNodeParent.innerHTML,
                     oldId = draggedNodeParent.id;
@@ -188,10 +174,8 @@ angular.module('exampleApp')
 
                     // Dont do anything if drop on the same element
                     if (draggedNode.id === targetElement.id || draggedNode.parentNode.id === targetElement.parentNode.id){
-                        console.log("element is the same!");
                     // This replaces existing nodes
                     } else {
-                        console.log("Dragged to the new area and will be moved/replaced");
 
                         // Changing parentDragged id
                         draggedNodeParent.id = articleSelect.id;
@@ -204,8 +188,6 @@ angular.module('exampleApp')
 
                         // into new implementation
                         articleSelect.innerHTML = allContent;
-
-                        // into old implementation
 
                         //event listeners update
 
@@ -228,7 +210,6 @@ angular.module('exampleApp')
                         });
                         localStorage.sticksContainer = containerNode.innerHTML;
                     }
-                
             }
         }
     }
@@ -240,9 +221,11 @@ angular.module('exampleApp')
     function handleFieldAdd(){
         var newArticle = document.createElement('article');
         newArticle.className = "sticks__article droptarget";
+
         var newRemoveImg = document.createElement('img');
         newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
         newRemoveImg.className = "sticks__removeField";
+
         var pencilToEdit = document.createElement('img');
         pencilToEdit.setAttribute('src', 'assets/img/pengreen.png');
         pencilToEdit.className = "sticks__pen";
@@ -258,16 +241,15 @@ angular.module('exampleApp')
 
     };
 
-
     //New stick to add
     function addNewStick(event, articleItem){
         var nodeCopy = document.getElementById(getData(event)).cloneNode(true);
         nodeCopy.id = "newId" + localStorage.countSticks;
         articleItem.appendChild(nodeCopy);
+
         var newNoteImg = document.getElementById('newId' + localStorage.countSticks);
         newNoteImg.className = "sticks__img";
         newNoteImg.style.opacity = "1";
-
 
         var stickyNoteText = document.createElement("textArea");
         stickyNoteText.id = "textArea" + localStorage.countArticles;
@@ -288,11 +270,11 @@ angular.module('exampleApp')
         localStorage.countArticles++;
 
         localStorage.sticksContainer = containerNode.innerHTML;
-
     }
 
     // Select the article regardless if article or its child has been targeted
     function articleSelectFn(event){
+        if (event.target.parentNode.id !== "") {
         var parentId = event.target.parentNode.id,
             parentIdLetters = parentId.match(/[a-z]+/g).join();
         switch(parentIdLetters){
@@ -305,7 +287,8 @@ angular.module('exampleApp')
                 var articleSelect = event.target;
                 break;
         }
-        return articleSelect;
+        return articleSelect;            
+        };
     }
 
     // article not empty - add a new stick to the first empty article
@@ -316,7 +299,6 @@ angular.module('exampleApp')
             while(getArticle.id !== "" && getArticle !== null){
                 getArticle = getArticle.nextSibling;
                 if (getArticle === null) {
-                    console.log('Nie ma miejsca');
                     var newArticle = document.createElement('article');
                     newArticle.className = "sticks__article droptarget";
                     containerNode.appendChild(newArticle);
@@ -333,6 +315,7 @@ angular.module('exampleApp')
             var newRemoveImg = document.createElement('img');
             newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
             newRemoveImg.className = "sticks__removeField";
+            
             var pencilToEdit = document.createElement('img');
             pencilToEdit.setAttribute('src', 'assets/img/pengreen.png');
             pencilToEdit.className = "sticks__pen";
@@ -343,15 +326,6 @@ angular.module('exampleApp')
             containerNode.lastChild.children[0].addEventListener('click', removeThis);
             containerNode.lastChild.children[1].addEventListener('click', textEdition);
         };
-    };
-
-    // appent cross when this function is used
-    function exitCrossAppend2(whereToAdd){
-        var newRemoveImg = document.createElement('img');
-        newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
-        newRemoveImg.className = "sticks__removeField";
-        whereToAdd.appendChild(newRemoveImg);
-        whereToAdd.children[0].addEventListener('click', removeThis);
     };
 
 // Event Handlers and its functions for smaller/repetitive aplication's elements
@@ -378,24 +352,26 @@ angular.module('exampleApp')
     });
 
     function textEdition(event){
-        var getThisArea = this.parentNode.children[3];
+        if (event.target.parentNode.children.length > 2) {
+            var getThisArea = this.parentNode.children[3];
 
-        var getTextArea = getThisArea.readOnly;
-        getTextArea === true ? getThisArea.focus() : "";
-        getThisArea.readOnly = (getTextArea === true ? false : true );
-        getTextArea === true ? getThisArea.draggable = false : getThisArea.draggable = true;
-        getTextArea === true ? getThisArea.className = "stickText" : getThisArea.className = "stickText stickText--outline";
+            var getTextArea = getThisArea.readOnly;
+            getTextArea === true ? getThisArea.focus() : "";
+            getThisArea.readOnly = (getTextArea === true ? false : true );
+            getTextArea === true ? getThisArea.draggable = false : getThisArea.draggable = true;
+            getTextArea === true ? getThisArea.className = "stickText" : getThisArea.className = "stickText stickText--outline";
 
-        var changeCursor = getThisArea.className;
-        getThisArea.className = (changeCursor === "stickText" ? "stickText stickText--outline" : "stickText stickText--editCursor" );
-        
-        var penIcon = event.target.src;
-        event.target.src = (event.target.src.includes('green')? 'assets/img/pen.png' : 'assets/img/pengreen.png');
-        
-        localStorage.sticksContainer = containerNode.innerHTML;
+            var changeCursor = getThisArea.className;
+            getThisArea.className = (changeCursor === "stickText" ? "stickText stickText--outline" : "stickText stickText--editCursor" );
+            
+            var penIcon = event.target.src;
+            event.target.src = (event.target.src.includes('green')? 'assets/img/pen.png' : 'assets/img/pengreen.png');
+            
+            localStorage.sticksContainer = containerNode.innerHTML;
+        }
     }
 
-    // For textarea  events keyup 
+    // For textareas events'es keyup 
 
     var typingEvent = document.querySelectorAll('.stickText');
 
@@ -418,8 +394,4 @@ angular.module('exampleApp')
                 };
             }
         }
-
-
-
-// Do not do anything bellow this line!
 });

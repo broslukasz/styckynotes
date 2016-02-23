@@ -3,54 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge,chrome=1"/>
-    <title>Contour</title>
+    <title>Sticky Notes</title>
     <link href="assets/stylesheets/index.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Patrick+Hand&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
     <!-- The core AngularJS library -->
     <script src="bower_components/angular/angular.min.js"></script>
 
-    <!-- The AngularJS routing library -->
-    <!--
-    <script src="bower_components/angular-route/angular-route.min.js"></script>
-    -->
-
-
 </head>
 <body ng-controller="mainCtrl as mainCtrl">
 
 <section>
     <div class="addStick" id="yellowStickField" draggable="false">
-    <img id="yellow" class="addStick__img" src="assets/img/stick.png" draggable="true">   
+        <img id="yellow" class="addStick__img" src="assets/img/stick.png" draggable="true" alt="yellow"/>   
     </div>
     <div class="addStick2" id="yellowStickField2" draggable="false">
-        <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true"/>  
+        <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true" alt="green"/>  
     </div>
     <div class="trashBin" id="trashBin" draggable="false">
-        <img id="trashBin" class="trashBin__img" src="assets/img/trashbin.png" draggable="false">  
+        <img class="trashBin__img" src="assets/img/trashbin.png" draggable="false" alt="trashBin"/>  
     </div>
-    <img src="assets/img/plus.png" class="plusSign" id="addNewField" draggable="false">
+    <img src="assets/img/plus.png" class="plusSign" id="addNewField" draggable="false" alt="plusSign"/>
 </section>
 
 <section class="sticks">
 
     <div class="sticks__container" id="cont" draggable="false">
         <article class="sticks__article droptarget" draggable="false">
-        <img draggable="false" src="assets/img/removecross.png" class="sticks__removeField"/>
-        <img draggable="false" src="assets/img/pengreen.png" class="sticks__pen"/>
+        <img draggable="false" src="assets/img/removecross.png" class="sticks__removeField" alt="removeCross" />
+        <img draggable="false" src="assets/img/pengreen.png" class="sticks__pen" alt="pen"/>
         </article>
     </div>
 
 </section>  
-
 
     <!-- Modules -->
     <script src="app/app.js"></script>
 
     <!-- Controllers -->
     <script src="app/controllers/mainctrl.js"></script>
-
-    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
 
 </body>
 </html>
