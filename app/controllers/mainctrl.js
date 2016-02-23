@@ -1,5 +1,7 @@
 angular.module('exampleApp')
-	.controller('mainCtrl', function() {
+	.controller('mainCtrl', function($scope) {
+
+    $scope.txtFromScope = "text from scope";
 
     var vm = this;
     vm.countSticks = 0;
@@ -52,6 +54,12 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 
 // Functions for specific features
 
+    // On textarea keyup
+    function textAreaKeyUp(event){
+            this.setAttribute('data-value', this.value);
+            this.innerHTML=this.getAttribute('data-value');
+        }
+
     //New stick to add
     function addNewStick(event, articleItem){
         var nodeCopy = document.getElementById(getData(event)).cloneNode(true);
@@ -61,14 +69,15 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
         newNoteImg.className = "sticks__img";
         newNoteImg.style.opacity = "1";
 
+
         var stickyNoteText = document.createElement("textArea");
-        stickyNoteText.setAttribute('readonly', '');
-        stickyNoteText.setAttribute('draggable', 'true');
-        stickyNoteText.setAttribute('ng-model', 'mainCtrl.textArea');
-        stickyNoteText.setAttribute('placeholder', 'Write a note!');
-        stickyNoteText.setAttribute('value', 'Text to write');
         stickyNoteText.id = "textArea" + vm.countArticles;
-        stickyNoteText.className = "stickText";
+        stickyNoteText.className = "stickText stickText--editCursor";
+        stickyNoteText.setAttribute('readOnly', '');
+        stickyNoteText.setAttribute('draggable', 'true');
+        stickyNoteText.setAttribute('data-value', 'dupa');
+        stickyNoteText.addEventListener('keyup', textAreaKeyUp);
+        stickyNoteText.innerHTML = stickyNoteText.getAttribute('data-value');
 
         articleItem.appendChild(stickyNoteText);
 
@@ -157,11 +166,12 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 
     function handleDragStart(event){
         // The dataTransfer.setData() method sets the data type and the value of the dragged data
+        /*
         var resetEdit = document.querySelectorAll('.stickText');
         [].forEach.call(resetEdit, function(reset) {
           reset.setAttribute('disabled', 'true');
         });
-
+        */
 
         targetElementId = event.target.id;
 
@@ -192,9 +202,6 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
 
     function handleDragOver(event){
         event.preventDefault();
-        if (event.target.parentNode.className === dropClassName) {
-            event.target.parentNode.style.border = "0.5vw dotted blue";
-        };
     }
 
     function handleDragLeave(event){
@@ -248,7 +255,7 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
             // This behaviour assures that only img has been dragged
             preventError = data.match(/newId/);
             // it checks if the img has beedraggedNoden dragged
-            if (draggedNode.parentNode.id.includes('article') && targetElement.className !== "sticks__removeField") {
+            if (draggedNode.parentNode.id.includes('article') && targetElement.className !== "sticks__removeField" && targetElement.className !== "sticks__pen") {
                 console.log('złapano obrazek!');
                 var detectElement = targetElement.childNodes.length > 1 ? "has children" : "no children";
                 var allContent = draggedNodeParent.innerHTML,
@@ -256,7 +263,7 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                     valueText = draggedNode.textContent;
 
                  // This behaviour to move the content
-                if (detectElement === "no children" && (targetElement.className !== "sticks__img" && targetElement.className !== "stickText") ) {
+                if (detectElement === "no children" && (targetElement.className !== "sticks__img" && !targetElement.className.includes('stickText'))) {
                     console.log("Dragged to no children area");
 
                     //the old one
@@ -298,16 +305,24 @@ wherefieldAdd.addEventListener('click', handleFieldAdd);
                         // into old implementation
                         console.log("Dragged to CHILDREN area and will be replaced");
 
-                        var editText = document.querySelectorAll('.sticks__pen');
-                        [].forEach.call(editText, function(text) {
-                          text.addEventListener('click', textEdition);
-                        });
+                        //event listeners
+
+                            // textarea keyUp
+                            var typingEvent = document.querySelectorAll('.stickText');
+                            [].forEach.call(typingEvent, function(area) {
+                              area.addEventListener('keyup', textAreaKeyUp);
+                            });
+
+                            var editText = document.querySelectorAll('.sticks__pen');
+                            [].forEach.call(editText, function(text) {
+                              text.addEventListener('click', textEdition);
+                            });
 
 
-                        var removeBin = document.querySelectorAll('.sticks__removeField');
-                        [].forEach.call(removeBin, function(bin) {
-                          bin.addEventListener('click', removeThis);
-                        });
+                            var removeBin = document.querySelectorAll('.sticks__removeField');
+                            [].forEach.call(removeBin, function(bin) {
+                              bin.addEventListener('click', removeThis);
+                            });
                     }
                 }
             }
@@ -358,7 +373,9 @@ var editText = document.querySelectorAll('.sticks__pen');
 
 function textEdition(event){
     var getTextArea = this.parentNode.children[3].readOnly;
-    this.parentNode.children[3].readOnly = (getTextArea === true ? '' : true ); 
+    this.parentNode.children[3].readOnly = (getTextArea === true ? false : true );  
+    var changeCursor = this.parentNode.children[3].className;
+    this.parentNode.children[3].className = (changeCursor === "stickText" ? "stickText stickText--editCursor" : "stickText" );
 }
 
 

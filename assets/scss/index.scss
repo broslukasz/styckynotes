@@ -68,6 +68,8 @@ $stickImgSize: 80%;
 .addStick__img{
 	width: $stickImgSize;
 	height: auto;
+	cursor: -webkit-grab;
+	cursor: grab;
 }
 
 $binSize: 13%;
@@ -111,6 +113,8 @@ $border: $imgWidth * 0.1;
 	border: 0.5vw solid black;
 	margin: 1% 1%;
 	position: relative;
+	cursor: grab;
+	cursor: -webkit-grab;
 }
 
 .sticks__img{
@@ -161,4 +165,9 @@ $border: $imgWidth * 0.1;
     left: 5vw;
     height: 10vw;
     width: 11vw;
+}
+
+.stickText--editCursor{
+	cursor: grab;
+	cursor: -webkit-grab;
 }

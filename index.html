@@ -20,24 +20,24 @@
 <body ng-controller="mainCtrl as mainCtrl">
 
 <section>
-    <div class="addStick" id="yellowStickField">
+    <div class="addStick" id="yellowStickField" draggable="false">
     <img id="yellow" class="addStick__img" src="assets/img/stick.png" draggable="true">   
     </div>
-    <div class="addStick2" id="yellowStickField2">
-        <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true"   
+    <div class="addStick2" id="yellowStickField2" draggable="false">
+        <img id="green" class="addStick__img" src="assets/img/stickgreen.png" draggable="true"/>  
     </div>
-    <div class="trashBin" id="trashBin">
-        <img id="trashBin" class="trashBin__img" src="assets/img/trashbin.png" draggable="true">  
+    <div class="trashBin" id="trashBin" draggable="false">
+        <img id="trashBin" class="trashBin__img" src="assets/img/trashbin.png" draggable="false">  
     </div>
     <img src="assets/img/plus.png" class="newField__plusSign" id="addNewField">
 </section>
 
 <section class="sticks">
 
-    <div class="sticks__container" id="cont">
-        <article class="sticks__article droptarget" draggable="true">
-        <img draggable="true" src="assets/img/removecross.png" class="sticks__removeField"/>
-        <img src="assets/img/pen.png" class="sticks__pen" />
+    <div class="sticks__container" id="cont" draggable="false">
+        <article class="sticks__article droptarget" draggable="false">
+        <img draggable="false" src="assets/img/removecross.png" class="sticks__removeField"/>
+        <img draggable="false" src="assets/img/pen.png" class="sticks__pen" ng-click="mainCtrl.textEdition($event)" />
         </article>
     </div>
 
