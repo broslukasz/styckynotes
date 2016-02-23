@@ -22,38 +22,67 @@ body {
   height: 100%;
   font-size: 1.5vw;
   font-weight: 900;
-  font-family: 'Alex Brush', cursive;
+  font-family: 'Patrick Hand', cursive;
+  font-style: italic;
 }
 
-/* line 25, ../scss/index.scss */
+/* line 26, ../scss/index.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 28, ../scss/index.scss */
+/* line 29, ../scss/index.scss */
 blockquote, q {
   quotes: none;
 }
 
-/* line 32, ../scss/index.scss */
+/* line 33, ../scss/index.scss */
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
 
-/* line 36, ../scss/index.scss */
+/* line 37, ../scss/index.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 43, ../scss/index.scss */
+/* line 44, ../scss/index.scss */
 body, html {
   height: 100%;
 }
 
-/* line 52, ../scss/index.scss */
+/* line 48, ../scss/index.scss */
+textarea {
+  overflow: hidden;
+}
+
+/* all */
+/* line 53, ../scss/index.scss */
+::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+/* line 54, ../scss/index.scss */
+::-moz-placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+/* firefox 19+ */
+/* line 55, ../scss/index.scss */
+:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+/* ie */
+/* line 56, ../scss/index.scss */
+input:-moz-placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+/* line 63, ../scss/index.scss */
 .addStick {
   width: 10%;
   height: 10%;
@@ -62,7 +91,7 @@ body, html {
   top: 2vw;
 }
 
-/* line 60, ../scss/index.scss */
+/* line 71, ../scss/index.scss */
 .addStick2 {
   width: 10%;
   height: 10%;
@@ -71,7 +100,7 @@ body, html {
   top: 12vw;
 }
 
-/* line 68, ../scss/index.scss */
+/* line 79, ../scss/index.scss */
 .addStick__img {
   width: 80%;
   height: auto;
@@ -79,7 +108,7 @@ body, html {
   cursor: grab;
 }
 
-/* line 78, ../scss/index.scss */
+/* line 89, ../scss/index.scss */
 .trashBin {
   width: 13%;
   height: 60%;
@@ -88,13 +117,13 @@ body, html {
   top: 2vw;
 }
 
-/* line 86, ../scss/index.scss */
+/* line 97, ../scss/index.scss */
 .trashBin__img {
   width: 60%;
   height: auto;
 }
 
-/* line 91, ../scss/index.scss */
+/* line 102, ../scss/index.scss */
 .sticks {
   text-align: center;
   width: 67%;
@@ -103,18 +132,18 @@ body, html {
   margin-right: auto;
 }
 
-/* line 99, ../scss/index.scss */
+/* line 110, ../scss/index.scss */
 .sticks__container {
   height: 100%;
 }
 
-/* line 106, ../scss/index.scss */
+/* line 117, ../scss/index.scss */
 .sticks__article {
   float: left;
   width: 31%;
-  height: 23.25%;
-  min-width: 4.03%;
-  min-height: 4.03%;
+  height: 0%;
+  min-width: 0%;
+  min-height: 0%;
   padding-bottom: 30%;
   border: 0.5vw solid black;
   margin: 1% 1%;
@@ -123,12 +152,12 @@ body, html {
   cursor: -webkit-grab;
 }
 
-/* line 120, ../scss/index.scss */
+/* line 131, ../scss/index.scss */
 .sticks__img {
   width: 80%;
 }
 
-/* line 124, ../scss/index.scss */
+/* line 135, ../scss/index.scss */
 .sticks__removeField {
   position: absolute;
   right: 1vw;
@@ -140,7 +169,7 @@ body, html {
   width: 2vw;
 }
 
-/* line 135, ../scss/index.scss */
+/* line 146, ../scss/index.scss */
 .sticks__pen {
   position: absolute;
   left: 1vw;
@@ -152,8 +181,8 @@ body, html {
   width: 2vw;
 }
 
-/* line 150, ../scss/index.scss */
-.newField__plusSign {
+/* line 157, ../scss/index.scss */
+.plusSign {
   position: fixed;
   right: 4.8vw;
   top: 12vw;
@@ -164,17 +193,41 @@ body, html {
   width: 10vw;
 }
 
-/* line 161, ../scss/index.scss */
+/* line 168, ../scss/index.scss */
+.confirmButton {
+  position: fixed;
+  right: 6.7vw;
+  top: 24vw;
+  font-weight: 900;
+  line-height: 1;
+  font-size: 10vw;
+  cursor: pointer;
+  width: 6vw;
+}
+
+/* line 179, ../scss/index.scss */
 .stickText {
   background: none;
   position: absolute;
   top: 3vw;
-  left: 5vw;
+  left: 4.5vw;
   height: 10vw;
   width: 11vw;
+  resize: none;
+  padding: 0.1vw;
+}
+/* line 188, ../scss/index.scss */
+.stickText:focus {
+  border: none;
+  outline: none;
 }
 
-/* line 170, ../scss/index.scss */
+/* line 195, ../scss/index.scss */
+.stickText--outline:focus {
+  border: 1px solid #5ba698;
+}
+
+/* line 200, ../scss/index.scss */
 .stickText--editCursor {
   cursor: grab;
   cursor: -webkit-grab;

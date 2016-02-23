@@ -20,7 +20,9 @@ angular.module('exampleApp')
     if (typeof(Storage) !== "undefined") {
         if (localStorage.sticksContainer) {
             localStorage.sticksContainer = String(localStorage.sticksContainer);
-        };
+        } else {
+            localStorage.sticksContainer = document.getElementById("cont").innerHTML;
+        }
     }
 
     // Global variables
@@ -31,6 +33,7 @@ angular.module('exampleApp')
         whereToDelete = document.getElementById("trashBin"),
         wherefieldAdd = document.getElementById('addNewField'),
         containerNode = document.getElementById('cont'),
+        confirmButton = document.getElementById('confirmButton'),
         dropClassName = "sticks__article droptarget",
         getArticle;
     var editText;
@@ -59,9 +62,7 @@ angular.module('exampleApp')
 
     // On drop handler
     sticksArea.addEventListener("drop", handleDrop);
-
     // On delete handler
-
     whereToDelete.addEventListener("drop", handleDeleteDrop);
 
     // On add handler
@@ -97,11 +98,12 @@ angular.module('exampleApp')
             event.dataTransfer.setData("text/plain", targetElementId);
             console.log("To jest: " + event.target.innerHTML)
         }
-        
+
         var readOnlyApply = document.querySelectorAll('.stickText');
         [].forEach.call(readOnlyApply, function(text) {
             text.readOnly = "true";
             text.className = "stickText stickText--editCursor";
+            text.parentNode.children[1].setAttribute('src', 'assets/img/pengreen.png');
         });
         
         // Change the opacity of the draggable element
@@ -172,48 +174,24 @@ angular.module('exampleApp')
 
         // Here are events for existing notes manipulation
         } else {
-            console.log("zmieniono stary element");
+            console.log("existing element has been changed");
             draggedNode.style.opacity = "1"
             // This behaviour assures that only img has been dragged
             preventError = data.match(/newId/);
             // it checks if the img has been droped to the node functional elements
             if (draggedNode.parentNode.id.includes('article') && targetElement.className !== "sticks__removeField" && targetElement.className !== "sticks__pen") {
-                console.log('złapano obrazek!');
+                console.log('img grabbed!');
                 var detectElement = targetElement.childNodes.length > 1 ? "has children" : "no children";
                 var allContent = draggedNodeParent.innerHTML,
                     oldId = draggedNodeParent.id;
                     valueText = draggedNode.textContent;
 
-                 // This behaviour to move the content
-                if (detectElement === "no children" && (targetElement.className !== "sticks__img" && !targetElement.className.includes('stickText'))) {
-                    console.log("Dragged to no children area");
-
-                    //the old one
-                    draggedNodeParent.id = "";
-                    draggedNodeParent.innerHTML = "";
-                    
-                    // adding a cross and penci to the old one (whereToAddAtribbute)
-                    //exitCrossAppend2(draggedNodeParent);
-                    console.log('Czy to kiedykolwiek się wydarza?');
-
-                    // the new one
-                    targetElement.innerHTML = allContent;
-                    targetElement.id = oldId;
-
-                    targetElement.children[0].addEventListener('click', removeThis);
-                    targetElement.children[1].addEventListener('click', textEdition);
-
-                    localStorage.sticksContainer = containerNode.innerHTML;
-
-                // This behaviour to Replace the content
-                } else if (detectElement === "has children" || detectElement === "no children") {
-
                     // Dont do anything if drop on the same element
                     if (draggedNode.id === targetElement.id || draggedNode.parentNode.id === targetElement.parentNode.id){
                         console.log("element is the same!");
+                    // This replaces existing nodes
                     } else {
-
-                        console.log('parent ID jeśli obszar: ' + event.target.parentNode.id);
+                        console.log("Dragged to the new area and will be moved/replaced");
 
                         // Changing parentDragged id
                         draggedNodeParent.id = articleSelect.id;
@@ -228,32 +206,34 @@ angular.module('exampleApp')
                         articleSelect.innerHTML = allContent;
 
                         // into old implementation
-                        console.log("Dragged to CHILDREN area and will be replaced");
 
-                        //event listeners
+                        //event listeners update
 
-                            // textarea keyUp
-                            var typingEvent = document.querySelectorAll('.stickText');
-                            [].forEach.call(typingEvent, function(area) {
-                              area.addEventListener('keyup', textAreaKeyUp);
-                            });
+                        // textarea keyUp
+                        var typingEvent = document.querySelectorAll('.stickText');
+                        [].forEach.call(typingEvent, function(area) {
+                          area.addEventListener('keyup', textAreaKeyUp);
+                        });
 
-                            var editText = document.querySelectorAll('.sticks__pen');
-                            [].forEach.call(editText, function(text) {
-                              text.addEventListener('click', textEdition);
-                            });
+                        // edit pen
+                        var editText = document.querySelectorAll('.sticks__pen');
+                        [].forEach.call(editText, function(text) {
+                          text.addEventListener('click', textEdition);
+                        });
 
-
-                            var removeBin = document.querySelectorAll('.sticks__removeField');
-                            [].forEach.call(removeBin, function(bin) {
-                              bin.addEventListener('click', removeThis);
-                            });
-                            localStorage.sticksContainer = containerNode.innerHTML;
+                        // remove bin
+                        var removeBin = document.querySelectorAll('.sticks__removeField');
+                        [].forEach.call(removeBin, function(bin) {
+                          bin.addEventListener('click', removeThis);
+                        });
+                        localStorage.sticksContainer = containerNode.innerHTML;
                     }
-                }
+                
             }
         }
     }
+
+// Functions for specific features
 
     // adding a new Field
 
@@ -264,7 +244,7 @@ angular.module('exampleApp')
         newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
         newRemoveImg.className = "sticks__removeField";
         var pencilToEdit = document.createElement('img');
-        pencilToEdit.setAttribute('src', 'assets/img/pen.png');
+        pencilToEdit.setAttribute('src', 'assets/img/pengreen.png');
         pencilToEdit.className = "sticks__pen";
 
         newArticle.appendChild(newRemoveImg);
@@ -278,7 +258,6 @@ angular.module('exampleApp')
 
     };
 
-// Functions for specific features
 
     //New stick to add
     function addNewStick(event, articleItem){
@@ -295,7 +274,9 @@ angular.module('exampleApp')
         stickyNoteText.className = "stickText stickText--editCursor";
         stickyNoteText.setAttribute('readOnly', '');
         stickyNoteText.setAttribute('draggable', 'true');
-        stickyNoteText.setAttribute('data-value', 'Write some text here!');
+        stickyNoteText.setAttribute('placeholder', 'Note here!');
+        stickyNoteText.setAttribute('maxlength', '100');
+        stickyNoteText.setAttribute('data-value', '');
         stickyNoteText.addEventListener('keyup', textAreaKeyUp);
         stickyNoteText.innerHTML = stickyNoteText.getAttribute('data-value');
 
@@ -353,7 +334,7 @@ angular.module('exampleApp')
             newRemoveImg.setAttribute('src', 'assets/img/removecross.png');
             newRemoveImg.className = "sticks__removeField";
             var pencilToEdit = document.createElement('img');
-            pencilToEdit.setAttribute('src', 'assets/img/pen.png');
+            pencilToEdit.setAttribute('src', 'assets/img/pengreen.png');
             pencilToEdit.className = "sticks__pen";
 
             getArticle.appendChild(newRemoveImg);
@@ -397,25 +378,47 @@ angular.module('exampleApp')
     });
 
     function textEdition(event){
-        var getTextArea = this.parentNode.children[3].readOnly;
-        this.parentNode.children[3].readOnly = (getTextArea === true ? false : true );
-        var changeCursor = this.parentNode.children[3].className;
-        this.parentNode.children[3].className = (changeCursor === "stickText" ? "stickText stickText--editCursor" : "stickText" );
+        var getThisArea = this.parentNode.children[3];
 
+        var getTextArea = getThisArea.readOnly;
+        getTextArea === true ? getThisArea.focus() : "";
+        getThisArea.readOnly = (getTextArea === true ? false : true );
+        getTextArea === true ? getThisArea.draggable = false : getThisArea.draggable = true;
+        getTextArea === true ? getThisArea.className = "stickText" : getThisArea.className = "stickText stickText--outline";
+
+        var changeCursor = getThisArea.className;
+        getThisArea.className = (changeCursor === "stickText" ? "stickText stickText--outline" : "stickText stickText--editCursor" );
+        
+        var penIcon = event.target.src;
+        event.target.src = (event.target.src.includes('green')? 'assets/img/pen.png' : 'assets/img/pengreen.png');
+        
         localStorage.sticksContainer = containerNode.innerHTML;
     }
 
-    // For textarea keyup 
+    // For textarea  events keyup 
 
     var typingEvent = document.querySelectorAll('.stickText');
-    [].forEach.call(typingEvent, function(area) {
-      area.addEventListener('keyup', textAreaKeyUp);
-    });
-    
-    function textAreaKeyUp(event){
+
+        // Keyup
+        [].forEach.call(typingEvent, function(area) {
+          area.addEventListener('keyup', textAreaKeyUp);
+        });
+
+        function textAreaKeyUp(event){
         this.setAttribute('data-value', this.value);
         this.innerHTML=this.getAttribute('data-value');
-    }
+        }
+
+        // make all textareas draggable when clicked somewhere outside active textarea
+        document.addEventListener('click', makeTextDraggable);
+        function makeTextDraggable(event){
+                for(var i = 0, y = containerNode.children.length; i < y; i++){
+                if (containerNode.children[i].children[3] !== undefined) {
+                    containerNode.children[i].children[3].draggable = true;
+                };
+            }
+        }
+
 
 
 // Do not do anything bellow this line!

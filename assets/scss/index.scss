@@ -19,7 +19,8 @@ body {
 	height: 100%;
 	font-size: 1.5vw;
 	font-weight: 900;
-	font-family: 'Alex Brush', cursive;
+	font-family: 'Patrick Hand', cursive;
+	font-style: italic;
 }
 
 ol, ul {
@@ -43,6 +44,16 @@ table {
 body,html {
 	height: 100%;
 }
+
+textarea {
+	overflow: hidden;
+}
+
+/* all */
+::-webkit-input-placeholder { color:rgba(0,0,0,0.2); }
+::-moz-placeholder { color:rgba(0,0,0,0.2); } /* firefox 19+ */
+:-ms-input-placeholder { color:rgba(0,0,0,0.2); } /* ie */
+input:-moz-placeholder { color:rgba(0,0,0,0.2); }
 
 //Layout Styles
 
@@ -143,11 +154,7 @@ $border: $imgWidth * 0.1;
     width: 2vw;
 }
 
-.newField{
-
-}
-
-.newField__plusSign{
+.plusSign{
 	position: fixed;
     right: 4.8vw;
     top: 12vw;
@@ -158,13 +165,36 @@ $border: $imgWidth * 0.1;
     width: 10vw;
 }
 
+.confirmButton{
+	position: fixed;
+    right: 6.7vw;
+    top: 24vw;
+    font-weight: 900;
+    line-height: 1;
+    font-size: 10vw;
+    cursor: pointer;
+    width: 6vw;
+}
+
 .stickText{
 	background: none;
 	position: absolute;
     top: 3vw;
-    left: 5vw;
+    left: 4.5vw;
     height: 10vw;
     width: 11vw;
+    resize: none;
+    padding: 0.1vw;
+    &:focus{
+    	border:none;
+    	outline: none;
+    }
+}
+
+.stickText--outline{
+	&:focus{
+		border: 1px solid #5ba698;
+	}
 }
 
 .stickText--editCursor{
